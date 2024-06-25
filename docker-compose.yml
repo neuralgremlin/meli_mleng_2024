@@ -1,0 +1,57 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: database
+    ports:
+      - "27017:27017"
+
+  dbclient_api:
+    build:
+      context: ./db-client-service
+    container_name: dbclient
+    depends_on:
+      - mongodb
+    ports:
+      - "8001:8080"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017
+
+  price_anomaly_api:
+    build:
+      context: ./price-anomaly
+      args:
+        - MODEL_ID=617d0093-466e-4db4-97fc-5916064d6a29
+    container_name: anomaly-api
+    depends_on:
+      - dbclient_api
+    ports:
+      - "8002:8080"
+    environment:
+      CLIENT_URI: dbclient_api:8080
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./monitoring/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./monitoring/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./monitoring/my_dashboard.json:/etc/grafana/provisioning/dashboards/my_dashboard.json
+
+volumes:
+  grafana-storage:
+

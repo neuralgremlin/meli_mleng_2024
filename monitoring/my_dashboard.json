@@ -1,0 +1,130 @@
+{
+      "id": null,
+      "title": "Prediction Monitoring Dashboard",
+      "tags": [],
+      "timezone": "browser",
+      "schemaVersion": 16,
+      "version": 0,
+      "refresh": "5s",
+      "panels": [
+        {
+          "type": "graph",
+          "title": "Request Processing Time",
+          "targets": [
+            {
+              "expr": "request_processing_seconds_sum",
+              "legendFormat": "95th percentile",
+              "refId": "A"
+            }
+          ],
+          "xaxis": {
+            "mode": "time"
+          },
+          "yaxes": [
+            {
+              "format": "s",
+              "label": "Seconds",
+              "logBase": 1
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "Prediction Count",
+          "targets": [
+            {
+              "expr": "prediction_count_total",
+              "legendFormat": "Predictions per second",
+              "refId": "A"
+            }
+          ],
+          "xaxis": {
+            "mode": "time"
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Count",
+              "logBase": 1
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "Anomaly Count",
+          "targets": [
+            {
+              "expr": "anomaly_count_total",
+              "legendFormat": "Anomalies per second",
+              "refId": "A"
+            }
+          ],
+          "xaxis": {
+            "mode": "time"
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "Count",
+              "logBase": 1
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "title": "Last Prediction Result",
+          "targets": [
+            {
+              "expr": "last_prediction_result",
+              "legendFormat": "Last Prediction Result",
+              "refId": "A"
+            }
+          ],
+          "options": {
+            "reduceOptions": {
+              "calcs": ["last"],
+              "fields": "",
+              "values": false
+            },
+            "orientation": "horizontal",
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "center"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          }
+        }
+      ]
+}
+  
