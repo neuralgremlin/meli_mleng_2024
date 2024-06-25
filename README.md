@@ -39,7 +39,7 @@ docker-compose up
 1. Upload CSV file. The Mongo Container is initialized empty. It is recommended to do this first.
 
 ```shell
-curl -X POST "http://localhost:8001/uploadcsv/" -F "file=@[CSV_FILE_PATH};type=text/csv"
+curl -X POST "http://localhost:8001/uploadcsv/" -F "file=@[CSV_FILE_PATH];type=text/csv"
 ```
 2. Get documents from
 
